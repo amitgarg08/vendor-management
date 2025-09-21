@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Vendor Management System</h1>
+            <button id="logoutBtn">Logout</button>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link" data-section="vendors">Vendors</a></li>
+                <li><a href="#" class="nav-link" data-section="services">Services</a></li>
+                <li><a href="#" class="nav-link" data-section="notifications">Notifications</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- Vendors Section -->
+            <div id="vendors" class="section">
+                <h2>Vendor Management</h2>
+                <button id="addVendorBtn" class="btn-primary">Add Vendor</button>
+                
+                <div class="search-filters">
+                    <input type="text" id="vendorSearch" placeholder="Search vendors...">
+                    <select id="vendorStatusFilter">
+                        <option value="">All Status</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">Inactive</option>
+                    </select>
+                </div>
+
+                <table id="vendorsTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Contact Person</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+                <div class="pagination">
+                    <button id="prevVendors" class="btn-secondary">Previous</button>
+                    <span id="vendorPageInfo">Page 1</span>
+                    <button id="nextVendors" class="btn-secondary">Next</button>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <div id="services" class="section hidden">
+                <h2>Service Management</h2>
+                <button id="addServiceBtn" class="btn-primary">Add Service</button>
+                
+                <div class="search-filters">
+                    <select id="serviceVendorFilter">
+                        <option value="">All Vendors</option>
+                    </select>
+                    <select id="serviceStatusFilter">
+                        <option value="">All Status</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="EXPIRED">Expired</option>
+                        <option value="PAYMENT_PENDING">Payment Pending</option>
+                        <option value="COMPLETED">Completed</option>
+                    </select>
+                </div>
+
+                <table id="servicesTable">
+                    <thead>
+                        <tr>
+                            <th>Service Name</th>
+                            <th>Vendor</th>
+                            <th>Start Date</th>
+                            <th>Expiry Date</th>
+                            <th>Payment Due</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+                <div class="pagination">
+                    <button id="prevServices" class="btn-secondary">Previous</button>
+                    <span id="servicePageInfo">Page 1</span>
+                    <button id="nextServices" class="btn-secondary">Next</button>
+                </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div id="notifications" class="section hidden">
+                <h2>Notifications & Reminders</h2>
+                
+                <div class="notification-tabs">
+                    <button class="tab-btn active" data-tab="expiring">Expiring Soon</button>
+                    <button class="tab-btn" data-tab="payment-due">Payment Due</button>
+                </div>
+
+                <div id="expiring" class="tab-content">
+                    <h3>Services Expiring in Next 15 Days</h3>
+                    <table id="expiringServicesTable">
+                        <thead>
+                            <tr>
+                                <th>Service Name</th>
+                                <th>Vendor</th>
+                                <th>Expiry Date</th>
+                                <th>Days Left</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div id="payment-due" class="tab-content hidden">
+                    <h3>Services with Payment Due in Next 15 Days</h3>
+                    <table id="paymentDueServicesTable">
+                        <thead>
+                            <tr>
+                                <th>Service Name</th>
+                                <th>Vendor</th>
+                                <th>Payment Due Date</th>
+                                <th>Amount</th>
+                                <th>Days Left</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="vendorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="vendorModalTitle">Add Vendor</h2>
+            <form id="vendorForm">
+                <input type="hidden" id="vendorId">
+                <div class="form-group">
+                    <label for="vendorName">Name:</label>
+                    <input type="text" id="vendorName" required>
+                </div>
+                <div class="form-group">
+                    <label for="vendorContactPerson">Contact Person:</label>
+                    <input type="text" id="vendorContactPerson" required>
+                </div>
+                <div class="form-group">
+                    <label for="vendorEmail">Email:</label>
+                    <input type="email" id="vendorEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="vendorPhone">Phone:</label>
+                    <input type="text" id="vendorPhone">
+                </div>
+                <div class="form-group">
+                    <label for="vendorStatus">Status:</label>
+                    <select id="vendorStatus">
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">Inactive</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="serviceModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="serviceModalTitle">Add Service</h2>
+            <form id="serviceForm">
+                <input type="hidden" id="serviceId">
+                <div class="form-group">
+                    <label for="serviceName">Service Name:</label>
+                    <input type="text" id="serviceName" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceVendor">Vendor:</label>
+                    <select id="serviceVendor" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceStartDate">Start Date:</label>
+                    <input type="date" id="serviceStartDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceExpiryDate">Expiry Date:</label>
+                    <input type="date" id="serviceExpiryDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="servicePaymentDue">Payment Due Date:</label>
+                    <input type="date" id="servicePaymentDue" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceAmount">Amount:</label>
+                    <input type="number" id="serviceAmount" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceStatus">Status:</label>
+                    <select id="serviceStatus">
+                        <option value="ACTIVE">Active</option>
+                        <option value="EXPIRED">Expired</option>
+                        <option value="PAYMENT_PENDING">Payment Pending</option>
+                        <option value="COMPLETED">Completed</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
